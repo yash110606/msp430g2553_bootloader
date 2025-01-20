@@ -10,23 +10,34 @@ _start:
     mov.b #0x41,&0x0022
     bic.b #0x41,&0x0021
     bis.b #0x01,&0x0021
-    mov #exit,R8
-    mov #main,R7
-    mov #0x08,R6
+    mov.b #0x81,&0x0061
+    mov.b #0x82,&0x0062
+    mov.b #0x00,&0x0063
+    mov.b #0x02,&0x0064
+    bis.b #0x04,&0x0022
+    bic.b #0x02,&0x0022
+    bis.b #0x06,&0x0026
+    bis.b #0x06,&0x0041
+    bic.b #0x01,&0x0061
+    bic.b #0x01,&0x0021
+    mov #exit,R7
+    mov #0x0B,R8
     mov #0x0200,R9
-
+    mov #main,R10
 l1:
-    mov.b @R7,R10
-    mov.b R10,@R9
+    mov.b @R10,R11
+    mov.b R11,@R9
+    inc R10
     inc R9
-    inc R7
-    dec R6
+    dec R8
+    cmp #0x00,R8
     jnz l1
     mov #0x0200,R0
 
 main:
-    bis.b #0x01,&0x0021
-    mov R8,R0
+    bit.b #0x01,&0x0003
+    jz -6
+    mov R7,R0
 
 exit:
     bis.b #0x40,&0x0021
