@@ -1,0 +1,55 @@
+.section .resetvec,"ax",@progbits
+.word _start
+
+.section .text
+.global _start
+
+_start:
+    mov #0x0280,R1
+    mov #0x5A80,&0x0120
+    mov.b #0x80,&0x0056
+    bic.b #0x0f,&0x0057
+    bis.b #0x07,&0x0057
+    mov.b #0x41,&0x0022
+    bic.b #0x41,&0x0021
+    bis.b #0x01,&0x0021
+    mov.b #0x81,&0x0061
+    mov.b #0x82,&0x0062
+    mov.b #0x00,&0x0063
+    mov.b #0x02,&0x0064
+    bis.b #0x04,&0x0022
+    bic.b #0x02,&0x0022
+    bis.b #0x06,&0x0026
+    bis.b #0x06,&0x0041
+    bic.b #0x01,&0x0061
+    bic.b #0x01,&0x0021
+    mov #exit,R7
+    mov #0x0B,R8
+    mov #0x0200,R9
+    mov #main,R10
+    mov #0x0200,R12
+l2:
+    mov #0x00,@R12
+    inc R12
+    cmp #0x0270,R12
+    jnz l2
+    jmp l1
+l1:
+    mov.b @R10,R11
+    mov.b R11,@R9
+    inc R10
+    inc R9
+    dec R8
+    cmp #0x00,R8
+    jnz l1
+    mov #0x0200,R0
+
+main:
+    bit.b #0x01,&0x0003
+    jz -6
+    mov R7,R0
+
+exit:
+    bis.b #0x40,&0x0021
+    jmp exit
+    
